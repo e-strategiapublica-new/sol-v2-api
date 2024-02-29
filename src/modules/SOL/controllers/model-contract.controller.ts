@@ -28,7 +28,7 @@ export class ModelContractController {
     @UseGuards(JwtAuthGuard, FuncoesGuard)
     @Funcoes(UserTypeEnum.administrador, UserTypeEnum.associacao)
     @ApiBearerAuth()
-    @UseInterceptors(FileInterceptor('file'))
+    @UseInterceptors(FileInterceptor('file', { limits: { fileSize: 22428800 } }))
     async register(
         @UploadedFile() file: Express.Multer.File,
         @Body() dto: ModelContractRegisterDto,
