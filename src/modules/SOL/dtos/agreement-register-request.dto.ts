@@ -38,6 +38,9 @@ export abstract class AgreementRegisterRequestDto {
     projectId: string;
 
     @ApiProperty({ required: false, type: String })
+    reviwerId: string;
+
+    @ApiProperty({ required: false, type: String })
     manager: string;
     association: AssociationModel;
     project: ProjectModel;

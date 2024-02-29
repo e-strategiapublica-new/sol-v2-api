@@ -49,6 +49,8 @@ export class Agreement {
     @Prop({ required: false, enum: Object.keys(AgreementActiveStatusEnum), default: AgreementActiveStatusEnum.active })
     activeStatus: AgreementActiveStatusEnum;
 
+    @Prop({ required: false, type: mongoose.Schema.Types.ObjectId, ref: User.name })
+    reviwerId: User;
 }
 
 export const AgreementSchema = SchemaFactory.createForClass(Agreement);

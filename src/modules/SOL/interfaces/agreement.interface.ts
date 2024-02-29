@@ -19,8 +19,8 @@ export interface AgreementInterface {
   project: ProjectModel;
   manager: UserModel;
   workPlan: WorkPlanModel[];
-  project_id: ProjectModel
-
+  project_id: ProjectModel;
+  reviwerId: UserModel;
 }
 
 
