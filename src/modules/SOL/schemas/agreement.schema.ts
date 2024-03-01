@@ -50,7 +50,7 @@ export class Agreement {
     activeStatus: AgreementActiveStatusEnum;
 
     @Prop({ required: false, type: mongoose.Schema.Types.ObjectId, ref: User.name })
-    reviwer: User;
+    reviewer: User;
 }
 
 export const AgreementSchema = SchemaFactory.createForClass(Agreement);

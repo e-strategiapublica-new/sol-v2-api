@@ -38,7 +38,7 @@ export abstract class AgreementRegisterRequestDto {
     projectId: string;
 
     @ApiProperty({ required: false, type: String })
-    reviwer: string;
+    reviewer: string;
 
     @ApiProperty({ required: false, type: String })
     manager: string;

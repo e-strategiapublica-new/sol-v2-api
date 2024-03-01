@@ -56,7 +56,7 @@ export class AgreementRepository {
       .find({ activeStatus: AgreementActiveStatusEnum.active })
       
       .populate("association")
-      .populate("reviwer")
+      .populate("reviewer")
       .populate({
         path: "workPlan",
         populate: {
@@ -86,7 +86,7 @@ export class AgreementRepository {
         // .populate("reviewer")
         .populate("association")
         .populate("manager")
-        .populate("reviwer")
+        .populate("reviewer")
         .populate({
           path: "workPlan",
           populate: {
@@ -108,7 +108,7 @@ export class AgreementRepository {
       // .populate("reviewer")
       .populate("association")
       .populate("manager")
-      .populate("reviwer")
+      .populate("reviewer")
       .populate({
         path: "workPlan",
         populate: {
@@ -130,7 +130,7 @@ export class AgreementRepository {
       // .populate("reviewer")
       .populate("association")
       .populate("manager")
-      .populate("reviwer")
+      .populate("reviewer")
       .populate({
         path: "workPlan",
         populate: {
@@ -153,7 +153,7 @@ export class AgreementRepository {
       .populate("association")
       .populate("project")
       .populate("manager")
-      .populate("reviwer")
+      .populate("reviewer")
       .populate({
         path: "workPlan",
         populate: {
