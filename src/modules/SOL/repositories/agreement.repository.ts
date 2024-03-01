@@ -149,7 +149,7 @@ export class AgreementRepository {
       .populate("association")
       .populate("project")
       .populate("manager")
-      .populate("reviwerId")
+      .populate("reviwer")
       .populate({
         path: "workPlan",
         populate: {

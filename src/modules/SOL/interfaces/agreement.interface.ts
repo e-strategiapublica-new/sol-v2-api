@@ -20,7 +20,7 @@ export interface AgreementInterface {
   manager: UserModel;
   workPlan: WorkPlanModel[];
   project_id: ProjectModel;
-  reviwerId: UserModel;
+  reviwer: UserModel;
 }
 
 

@@ -208,7 +208,7 @@ export class AgreementService {
         associationId: association._id.toString(),
         projectId: reviewer._id.toString(),
         manager: reviewer._id.toString(),
-        reviwerId: reviewer._id.toString(),
+        reviwer: reviewer._id.toString(),
       });
 
       

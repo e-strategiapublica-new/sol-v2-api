@@ -38,7 +38,7 @@ export abstract class AgreementRegisterRequestDto {
     projectId: string;
 
     @ApiProperty({ required: false, type: String })
-    reviwerId: string;
+    reviwer: string;
 
     @ApiProperty({ required: false, type: String })
     manager: string;
