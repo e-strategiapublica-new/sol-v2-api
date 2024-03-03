@@ -253,33 +253,33 @@ export class ContractService {
       for (let allotProd of contract.bid_number["add_allotment"]) {
         for (let p = 0; p < responseWorkPlan.product.length; p++) {
           for (let b = 0; b < allotProd.add_item.length; b++) {
-            if (responseWorkPlan.product[p].costItems.name === allotProd.add_item[b].item) {
+            if (responseWorkPlan.product[p].items.name === allotProd.add_item[b].item) {
               let soma = responseWorkPlan.product[p].unitValue * Number(allotProd.add_item[b].quantity);
               valor_estimado = valor_estimado + soma;
 
               if (p == 0) {
                 lotesEspecificacao.push(
                   " " +
-                    responseWorkPlan.product[p].costItems.name +
+                    responseWorkPlan.product[p].items.name +
                     ": " +
                     " " +
-                    responseWorkPlan.product[p].costItems.specification
+                    responseWorkPlan.product[p].items.specification
                 );
                 lotesCompleto.push(
                   "<br>" +
                     allotProd.allotment_name +
                     ": " +
                     "Item: " +
-                    responseWorkPlan.product[p].costItems.name +
+                    responseWorkPlan.product[p].items.name +
                     ", " +
                     "Especificação: " +
-                    responseWorkPlan.product[p].costItems.specification +
+                    responseWorkPlan.product[p].items.specification +
                     ", " +
                     "Quantidade: " +
                     allotProd.add_item[b].quantity +
                     ", " +
                     "Unidade: " +
-                    responseWorkPlan.product[p].costItems.unitMeasure +
+                    responseWorkPlan.product[p].items.unitMeasure +
                     ", " +
                     "Valor unitário: " +
                     responseWorkPlan.product[p].unitValue +
@@ -292,19 +292,19 @@ export class ContractService {
                     ""
                 );
               } else {
-                lotesEspecificacao.push(", " + responseWorkPlan.product[p].costItems.specification);
+                lotesEspecificacao.push(", " + responseWorkPlan.product[p].items.specification);
                 lotesCompleto.push(
                   "Item: " +
-                    responseWorkPlan.product[p].costItems.name +
+                    responseWorkPlan.product[p].items.name +
                     ", " +
                     "Especificação: " +
-                    responseWorkPlan.product[p].costItems.specification +
+                    responseWorkPlan.product[p].items.specification +
                     ", " +
                     "Quantidade: " +
                     allotProd.add_item[b].quantity +
                     ", " +
                     "Unidade: " +
-                    responseWorkPlan.product[p].costItems.unitMeasure +
+                    responseWorkPlan.product[p].items.unitMeasure +
                     ", " +
                     "Valor unitário: " +
                     responseWorkPlan.product[p].unitValue +
