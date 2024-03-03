@@ -15,11 +15,11 @@ export class WorkPlan {
         quantity: { type: Number, required: true },
         unitValue: { type: Number, required: true },
         unit: { type: String },
-        costItems: { type: mongoose.Schema.Types.ObjectId, ref: Items.name, required: true },
+        items: { type: mongoose.Schema.Types.ObjectId, ref: Items.name, required: true },
       },
     ],
   })
-  product: Array<{ quantity: number; unit: string; unitValue: number; costItems: Items }>;
+  product: Array<{ quantity: number; unit: string; unitValue: number; items: Items }>;
 
 }
 export const WorkPlanSchema = SchemaFactory.createForClass(WorkPlan);
