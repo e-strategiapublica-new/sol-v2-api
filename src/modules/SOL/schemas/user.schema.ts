@@ -3,9 +3,9 @@ import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { UserStatusEnum } from "../enums/user-status.enum";
 import { UserTypeEnum } from '../enums/user-type.enum';
 import { UserRolesEnum } from "../enums/user-roles.enum";
-import { Association } from './association.schema';
 import { Notification } from './notification.schema';
 import { Supplier } from './supplier.schema';
+import { Association } from './association.schema';
 
 @Schema({ timestamps: true, collection: User.name.toLowerCase() })
 export class User {
