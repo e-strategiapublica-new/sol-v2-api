@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import mongoose from "mongoose";
+import { CostItems } from "./cost-items.schema";
 import { Items } from "./items.schema";
 
 @Schema({ timestamps: true, collection: WorkPlan.name.toLowerCase() })
