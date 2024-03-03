@@ -5,6 +5,7 @@ import { CostItemsModel } from "../models/cost-items.model";
 import { ProjectModel } from "../models/project.model";
 import { UserModel } from "../models/user.model";
 import { WorkPlanModel } from "../models/work-plan.model";
+import { Items } from "../schemas/items.schema";
 
 export interface AgreementInterface {
   register_number: string;
@@ -31,6 +32,6 @@ export interface AgreementInterfaceWithId extends AgreementInterface {
 
 export interface WorkPlanInterface {
   name: string;
-  product: Array<{ quantity: string; unitValue: number; costItems: CostItemsModel }>;
+  product: Array<{ quantity: string; unitValue: number; costItems: Items }>;
 
 }
