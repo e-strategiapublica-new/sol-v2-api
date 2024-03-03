@@ -89,10 +89,7 @@ export class AgreementRepository {
           populate: {
             path: "product",
             populate: {
-              path: "costItems",
-              populate: {
-                path: "category",
-              },
+              path: "items",
             },
           },
         });
@@ -111,10 +108,7 @@ export class AgreementRepository {
         populate: {
           path: "product",
           populate: {
-            path: "costItems",
-            populate: {
-              path: "category",
-            },
+            path: "items",
           },
         },
       });
@@ -133,10 +127,7 @@ export class AgreementRepository {
         populate: {
           path: "product",
           populate: {
-            path: "costItems",
-            populate: {
-              path: "category",
-            },
+            path: "items",
           },
         },
       });
@@ -156,10 +147,7 @@ export class AgreementRepository {
         populate: {
           path: "product",
           populate: {
-            path: "costItems",
-            populate: {
-              path: "category",
-            },
+            path: "items",
           },
         },
       });
