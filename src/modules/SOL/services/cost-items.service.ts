@@ -61,7 +61,7 @@ export class CostItemsService {
     for(let i = 0; i < agreement.length; i++) {
         if(agreement[i].workPlan.length > 0) {
           for(let j = 0; j < agreement[i].workPlan.length; j ++) {
-             itens.push(await this._constItemsRepository.getById(agreement[i].workPlan[j].product[0].costItems._id.toString()))  
+             itens.push(await this._constItemsRepository.getById(agreement[i].workPlan[j].product[0].items._id.toString()))  
               
             }
           
