@@ -4,7 +4,7 @@ import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 export class Items {
     
     @Prop({ type: String })
-    _id: string;
+    _id: string; 
 
     @Prop({ required: true, type: String })
     name: string;
