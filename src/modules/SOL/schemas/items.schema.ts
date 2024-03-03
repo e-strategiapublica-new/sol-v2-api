@@ -3,7 +3,7 @@ import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 @Schema({ timestamps: true, collection: Items.name.toLowerCase() })
 export class Items {
     
-    @Prop({ type: String })
+    @Prop({ required: true, type: String })
     _id: string; 
 
     @Prop({ required: true, type: String })
