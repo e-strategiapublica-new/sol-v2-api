@@ -45,7 +45,7 @@ export class WorkPlanRepository {
   }
 
   async findAll(): Promise<WorkPlanModel[]> {
-    return await this._model.find().populate('product.costItems');
+    return await this._model.find().populate('product.items');
   }
 
   async update(id: string, dto: WorkPlanInterface): Promise<WorkPlanModel> {
@@ -53,6 +53,6 @@ export class WorkPlanRepository {
   }
 
   async listByIds(ids: string[]): Promise<WorkPlanModel[]> {
-    return await this._model.find({ _id: { $in: ids } }).populate('product.costItems');
+    return await this._model.find({ _id: { $in: ids } }).populate('product.items');
   }
 }
