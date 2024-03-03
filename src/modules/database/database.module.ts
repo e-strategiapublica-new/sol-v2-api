@@ -28,6 +28,7 @@ import { EndPoints, EndPointsSchema } from "../SOL/schemas/endpoints.schema";
 import { Plataform, PlataformSchema } from "../SOL/schemas/plataform.schema";
 import { Project, ProjectSchema } from "../SOL/schemas/project.schema";
 import { Registry, RegistrySchema } from "../SOL/schemas/registry.schema";
+import { Items, ItemsSchema } from "../SOL/schemas/items.schema";
 
 
 @Module({
@@ -49,6 +50,7 @@ import { Registry, RegistrySchema } from "../SOL/schemas/registry.schema";
       { name: Tutorial.name, schema: TutorialSchema },
       { name: Association.name, schema: AssociationSchema },
       { name: CostItems.name, schema: CostItemsSchema },
+      { name: Items.name, schema: ItemsSchema },
       { name: Bids.name, schema: BidsSchema },
       { name: Group.name, schema: GroupSchema },
       { name: Products.name, schema: ProductsSchema },
