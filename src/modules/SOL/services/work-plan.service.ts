@@ -26,14 +26,14 @@ export class WorkPlanService {
         
     let itemArray = [];
     for(let i=0;i<dto.product.length;i++){
-      itemArray.push({ "_id": new ObjectId(dto.product[i].costItems)}  );
+      itemArray.push({ "_id": new ObjectId(dto.product[i].items)}  );
     }
 
     const costItems = await this._itemsModel.listByIds(itemArray) 
 
     for (let i = 0; i < dto.product.length; i++) {
-      const item = costItems.find(item => item._id.toString() === dto.product[i].costItems);
-      dto.product[i].costItems = item as any;
+      const item = costItems.find(item => item._id.toString() === dto.product[i].items);
+      dto.product[i].items = item as any;
     }    
 
     const result = await this._workPlanRepository.register(dto as any);
@@ -43,11 +43,11 @@ export class WorkPlanService {
   }
 
   async registerFromIntegration(dto: WorkPlanRegisterRequestDto): Promise<WorkPlanModel> {
-    const costItems = await this._costItemsService.listByIds(dto.product.map(item => item.costItems));
+    const costItems = await this._costItemsService.listByIds(dto.product.map(item => item.items));
 
     for (let i = 0; i < dto.product.length; i++) {
-      const item = costItems.find(item => item._id.toString() === dto.product[i].costItems);
-      dto.product[i].costItems = item as any;
+      const item = costItems.find(item => item._id.toString() === dto.product[i].items);
+      dto.product[i].items = item as any;
     }
 
     const result = await this._workPlanRepository.register(dto as any);

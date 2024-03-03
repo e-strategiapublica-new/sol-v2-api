@@ -12,9 +12,9 @@ export abstract class WorkPlanRegisterRequestDto {
       properties: {
         quantity: { type: "number" },        
         unitValue: { type: "number" },
-        costItems: { type: "string" },
+        items: { type: "string" },
       },
     },
   })
-  product: Array<{ quantity: number; unitValue: number; costItems: string }>;
+  product: Array<{ quantity: number; unitValue: number; items: string }>;
 }

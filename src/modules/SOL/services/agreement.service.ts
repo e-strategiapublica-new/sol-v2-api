@@ -218,7 +218,7 @@ export class AgreementService {
         let products: {
           quantity: number;
           unitValue: number;
-          costItems: string;
+          items: string;
         }[] = [];
 
 
@@ -269,7 +269,7 @@ export class AgreementService {
           products.push({
             quantity: produtcs.quantity,
             unitValue: produtcs.estimated_cost,
-            costItems: costItems as any,
+            items: costItems as any,
           });
 
         });
