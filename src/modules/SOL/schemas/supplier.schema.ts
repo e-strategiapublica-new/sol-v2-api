@@ -1,11 +1,10 @@
 import mongoose from "mongoose";
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
-
-import { SuplierTypeEnum } from "../enums/supplier-type.enum";
-import { Address, AddressSchema } from "src/shared/schemas/address.schema";
 import { LegalRepresentative, LegalRepresentativeSchema } from "src/shared/schemas/legal-representative.schema";
 import { Notification } from "./notification.schema";
 import { Category } from "./category.schema";
+import { SuplierTypeEnum } from "../enums/supplier-type.enum";
+import { Address, AddressSchema } from "src/shared/schemas/address.schema";
 
 
 @Schema({ timestamps: true, collection: Supplier.name.toLowerCase() })
