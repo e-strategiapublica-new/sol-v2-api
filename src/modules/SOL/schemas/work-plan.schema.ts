@@ -1,6 +1,5 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import mongoose from "mongoose";
-import { CostItems } from "./cost-items.schema";
 import { Items } from "./items.schema";
 
 @Schema({ timestamps: true, collection: WorkPlan.name.toLowerCase() })
@@ -15,7 +14,7 @@ export class WorkPlan {
         quantity: { type: Number, required: true },
         unitValue: { type: Number, required: true },
         unit: { type: String },
-        costItems: { type: mongoose.Schema.Types.ObjectId, ref: Items._id, required: true },
+        costItems: { type: mongoose.Schema.Types.ObjectId, ref: Items.name, required: true },
       },
     ],
   })

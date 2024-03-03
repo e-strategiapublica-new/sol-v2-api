@@ -16,7 +16,7 @@ export class WorkPlanRepository {
   constructor(@InjectModel(WorkPlan.name) private readonly _model: Model<WorkPlanModel>) {}
 
   async findById(id: string): Promise<WorkPlanModel> {
-    return await this._model.findOne({ _id: id }).populate('product.items');
+    return await this._model.findOne({ _id: id }).populate('product.costItems');
   }
 
   async deleteById(id: string): Promise<WorkPlanModel> {
