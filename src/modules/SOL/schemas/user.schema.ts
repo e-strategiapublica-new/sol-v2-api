@@ -40,11 +40,9 @@ export class User {
     @Prop({ required: false,  type: mongoose.Schema.Types.ObjectId, ref: Association.name  })
     association: Association;
 
-    
     @Prop({ required: false, type:mongoose.Schema.Types.ObjectId, ref: Supplier.name})
     supplier: Supplier;
     
-
     @Prop({ required: false, enum: Object.keys(UserRolesEnum) })
     roles: UserRolesEnum;
 
