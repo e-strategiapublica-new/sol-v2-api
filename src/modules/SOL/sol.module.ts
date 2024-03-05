@@ -55,7 +55,7 @@ import { ProposalController } from './controllers/proposal.controller';
 import { WorkPlanRepository } from './repositories/work-plan.repository';
 import { WorkPlanService } from './services/work-plan.service';
 import { AgreementService } from './services/agreement.service';
-import { WorkPlanController } from './controllers/work-plan.controle';
+import { WorkPlanController } from './controllers/work-plan.controller';
 import { AllotmentRepository } from './repositories/allotment.repository';
 import { AllotmentService } from './services/allotment.service';
 import { AllotmentController } from './controllers/allotment.controller';

@@ -26,10 +26,10 @@ export class WorkPlanService {
         
     let itemArray = [];
     for(let i=0;i<dto.product.length;i++){
-      itemArray.push({ "_id": new ObjectId(dto.product[i].items)}  );
+      itemArray.push({ "_id": new ObjectId(dto.product[i].items)});
     }
-
-    const costItems = await this._itemsModel.listByIds(itemArray) 
+    console.log("aqui", itemArray);
+    const costItems = await this._itemsModel.listByIds(itemArray); 
 
     for (let i = 0; i < dto.product.length; i++) {
       const item = costItems.find(item => item._id.toString() === dto.product[i].items);

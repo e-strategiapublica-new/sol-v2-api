@@ -1,9 +1,10 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
+import mongoose from "mongoose";
 
 @Schema({ timestamps: true, collection: Items.name.toLowerCase() })
 export class Items {
     
-    @Prop({ required: true, type: String })
+    @Prop({ required: false, type: mongoose.Schema.Types.ObjectId })
     _id: string; 
 
     @Prop({ required: true, type: String })
@@ -23,7 +24,6 @@ export class Items {
     
     @Prop({ required: true, type: String })
     specification: string;
-
 }
 
 export const ItemsSchema = SchemaFactory.createForClass(Items);

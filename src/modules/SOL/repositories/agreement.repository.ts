@@ -11,7 +11,7 @@ export class AgreementRepository {
   constructor(@InjectModel(Agreement.name) private readonly _model: Model<AgreementModel>) {}
 
   async findById(id: string): Promise<AgreementModel> {
-    return (await this._model.findOne({ _id: id }).populate("workPlan").populate("association").populate("manager").populate("project"));
+    return (await this._model.findOne({ _id: id }).populate("workPlan").populate("association").populate("manager").populate("project").populate("reviewer"));
   }
 
   async findAgreementByReviewerOrManagerId(_id: string): Promise<AgreementModel[]> {
