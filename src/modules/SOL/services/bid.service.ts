@@ -167,9 +167,9 @@ export class BidService {
 
     if (!count) {
       const numberOfBids = await this._bidsRepository.list();
-      
+
       dto.bid_count = (Number(numberOfBids.length) + 1)?.toString();
-      
+
     } else {
       dto.bid_count = (Number(count) + 1)?.toString();
     }
@@ -181,7 +181,7 @@ export class BidService {
     if (!association) throw new BadRequestException("Associação nao encontrada!");
     dto.agreement = agreement;
     dto.association = association;
-      
+
     const now = new Date();
 
     if (dto.editalFile) {
@@ -223,7 +223,7 @@ export class BidService {
 
     let newId;
 
-    if (!dto.add_allotment) throw new BadRequestException("Não foi possivel cadastrar essa licitação!");    
+    if (!dto.add_allotment) throw new BadRequestException("Não foi possivel cadastrar essa licitação!");
     dto._id = new ObjectId();
     const result = await this._bidsRepository.register(dto);
     if (!result) {
@@ -232,18 +232,18 @@ export class BidService {
 
     // Lacchain
     // The Bid was registered successfully. Register on Lacchain  
-      
-    newId = new ObjectId();
-    const bidHistoryId = newId.toHexString()    
 
-    const data = await this.createData(dto)    
+    newId = new ObjectId();
+    const bidHistoryId = newId.toHexString()
+
+    const data = await this.createData(dto)
     const hash = await this.calculateHash(data);
-    const txHash = await this._lacchainModel.setBidData(token, bidHistoryId, hash);    
+    const txHash = await this._lacchainModel.setBidData(token, bidHistoryId, hash);
     await this._bidHistoryModel.insert(bidHistoryId, data, txHash);
 
-    const obj = {      
-      title: `Convite para licitação de número ${dto.bid_count}`,      
-      description: dto.description,      
+    const obj = {
+      title: `Convite para licitação de número ${dto.bid_count}`,
+      description: dto.description,
       from_user: associationId,
       to_user: ["aaa"],
       deleted: false,
@@ -254,10 +254,10 @@ export class BidService {
       result.association?._id.toString(),
       result._id.toString()
     );
-    
+
     if (dto.modality === BidModalityEnum.openClosed) {
       const listSuppliers = await this._supplierService.list();
-     
+
       const suppliers = listSuppliers.filter(item => !item.blocked).map(ele => ele._id?.toString() as string);
       for (let j = 0; j < suppliers.length; j++) {
         await this._notificationService.registerByBidCreation(suppliers[j], obj);
@@ -268,7 +268,7 @@ export class BidService {
         for (let j = 0; j < result.invited_suppliers.length; j++) {
           await this._notificationService.registerByBidCreation(result.invited_suppliers[j]?._id, obj);
         }
-      
+
       return result;
     }
   }
@@ -276,72 +276,72 @@ export class BidService {
   async findAgreementByReviewerOrManagerId(_id: string): Promise<BidModel[]> {
     const agreements = await this._agreementService.findAgreementByReviewerOrManagerId(_id)
     const results: BidModel[] = []
-    for(let i = 0; i < agreements.length; i++) {
-     const bid =  await this._bidsRepository.getByAgreementId(agreements[i]._id)
-     if(bid) results.push(...bid)
-     
+    for (let i = 0; i < agreements.length; i++) {
+      const bid = await this._bidsRepository.getByAgreementId(agreements[i]._id)
+      if (bid) results.push(...bid)
+
     }
     return results
   }
 
   async findAgreementByReviewerId(_id: string): Promise<BidModel[] | void> {
     const projects = await this._projectService.findAllProjectsByReviewerId(_id)
-    const agreement_list: AgreementInterfaceWithId[] =[]
-     for(let i = 0; i < projects.length; i++) {
-     const agreement =  await this._agreementService.findAgreementByProjectrId(projects[i]._id.toString())
-     if(agreement) agreement_list.push(agreement)
+    const agreement_list: AgreementInterfaceWithId[] = []
+    for (let i = 0; i < projects.length; i++) {
+      const agreement = await this._agreementService.findAgreementByProjectrId(projects[i]._id.toString())
+      if (agreement) agreement_list.push(agreement)
     }
     const results: BidModel[] = []
-    for(let i = 0; i < agreement_list.length; i++) {
-      const bid =  await this._bidsRepository.getByAgreementId(agreement_list[i]._id.toString())
-      if(bid) results.push(...bid)
-     }
+    for (let i = 0; i < agreement_list.length; i++) {
+      const bid = await this._bidsRepository.getByAgreementId(agreement_list[i]._id.toString())
+      if (bid) results.push(...bid)
+    }
     return results
   }
 
   async findAgreementByViewerId(_id: string): Promise<BidModel[] | void> {
     const projects = await this._projectService.findAllProjectsByViewerId(_id)
-    const agreement_list: AgreementInterfaceWithId[] =[]
-     for(let i = 0; i < projects.length; i++) {
-     const agreement =  await this._agreementService.findAgreementByProjectrId(projects[i]._id.toString())
-     if(agreement) agreement_list.push(agreement)
+    const agreement_list: AgreementInterfaceWithId[] = []
+    for (let i = 0; i < projects.length; i++) {
+      const agreement = await this._agreementService.findAgreementByProjectrId(projects[i]._id.toString())
+      if (agreement) agreement_list.push(agreement)
     }
     const results: BidModel[] = []
-    for(let i = 0; i < agreement_list.length; i++) {
-      const bid =  await this._bidsRepository.getByAgreementId(agreement_list[i]._id.toString())
-      if(bid) results.push(...bid)
-     }
+    for (let i = 0; i < agreement_list.length; i++) {
+      const bid = await this._bidsRepository.getByAgreementId(agreement_list[i]._id.toString())
+      if (bid) results.push(...bid)
+    }
     return results
   }
   async findAgreementByProjectManagerId(_id: string): Promise<BidModel[] | void> {
     const projects = await this._projectService.findAllProjectsByManagerId(_id)
-    const agreement_list: AgreementInterfaceWithId[] =[]
-     for(let i = 0; i < projects.length; i++) {
-     const agreement =  await this._agreementService.findAgreementByProjectrId(projects[i]._id.toString())
-     if(agreement) agreement_list.push(agreement)
+    const agreement_list: AgreementInterfaceWithId[] = []
+    for (let i = 0; i < projects.length; i++) {
+      const agreement = await this._agreementService.findAgreementByProjectrId(projects[i]._id.toString())
+      if (agreement) agreement_list.push(agreement)
     }
     const results: BidModel[] = []
-    for(let i = 0; i < agreement_list.length; i++) {
-      const bid =  await this._bidsRepository.getByAgreementId(agreement_list[i]._id.toString())
-      
-      if(bid) results.push(...bid)
-     }
+    for (let i = 0; i < agreement_list.length; i++) {
+      const bid = await this._bidsRepository.getByAgreementId(agreement_list[i]._id.toString())
+
+      if (bid) results.push(...bid)
+    }
     return results
   }
 
   async findAgreementByManagerId(_id: string): Promise<BidModel[]> {
     const agreements = await this._agreementService.findAgreementByManagerId(_id)
-    const bd =  await this._bidsRepository.list()
+    const bd = await this._bidsRepository.list()
     const results: BidModel[] = []
-    for(let i = 0; i < agreements.length; i++) {
-     const bid =  await this._bidsRepository.getByAgreementId(agreements[i]._id.toString());
-     if(bid) results.push(...bid)
-     
+    for (let i = 0; i < agreements.length; i++) {
+      const bid = await this._bidsRepository.getByAgreementId(agreements[i]._id.toString());
+      if (bid) results.push(...bid)
+
     }
     return results
   }
 
- 
+
 
   async list(): Promise<BidModel[]> {
     const result = await this._bidsRepository.list();
@@ -379,8 +379,8 @@ export class BidService {
     if (!agreement) throw new BadRequestException("Convênio não encontrado!");
     dto.agreement = agreement;
 
-    
-    let newArray = [];    
+
+    let newArray = [];
     for (let i = 0; i < dto.add_allotment.length; i++) {
       if (dto.add_allotment[i]?._id) {
         const old = await this._allotmentRepository.listById(dto.add_allotment[i]?._id);
@@ -396,16 +396,16 @@ export class BidService {
       dto.add_allotment[i].status = AllotmentStatusEnum.rascunho;
       newArray.push(await this._allotmentRepository.register(dto.add_allotment[i]));
     }
-         
-    if(dto.bid_type == "individualPrice"){      
-      for(let i =0;i<dto.add_allotment.length;i++){       
-        await this._allotmentRepository.editUpdate(dto.add_allotment[i]._id, dto.add_allotment[i])          
+
+    if (dto.bid_type == "individualPrice") {
+      for (let i = 0; i < dto.add_allotment.length; i++) {
+        await this._allotmentRepository.editUpdate(dto.add_allotment[i]._id, dto.add_allotment[i])
       }
     }
 
-    dto.add_allotment = newArray;      
+    dto.add_allotment = newArray;
 
-    
+
     const result = await this._bidsRepository.update(_id, dto);
     return result;
   }
@@ -430,30 +430,30 @@ export class BidService {
       dto.proofreader = user;
 
     if (dto.status === "released") {
-       
+
       const addDate = new Date();
       const nextDay = new Date(addDate.setDate(addDate.getDate() + 1)).toISOString().slice(0, 10);
-      let bid = await this._bidsRepository.getBidById(_id);            
+      let bid = await this._bidsRepository.getBidById(_id);
       const configs = await this._plataformRepository.findOne();
 
       if (!configs)
         throw new BadRequestException("Não foi possivel encontrar as configurações da plataforma!");
-      
+
       const { start_at } = await this._bidsRepository.addStartHour(_id, `${nextDay}T${configs.start_at}`);
       const slicedData = start_at.slice(0, 10);
       const unix = new Date(slicedData);
       let unixTimeStamp = unix.setDate(unix.getDate() + Number(bid.end_at));
       let data = new Date(unixTimeStamp);
       let endDate = data.toISOString().slice(0, 10);
-      
+
       await this._bidsRepository.addEndHour(_id, `${endDate}T${configs.end_at}`);
       const result = await this._bidsRepository.updateStatus(_id, dto);
-      
+
       await this._allotmentRepository.updateStatusByIds(
         result.add_allotment.map(el => el._id.toString()),
         AllotmentStatusEnum.lancada
       );
-      
+
       const registry = new RegistrySendRequestDto(
         Number(bid.bid_count),
         bid.description,
@@ -475,18 +475,18 @@ export class BidService {
         bid.status,
         bid.association,
         bid.createdAt,
-      );      
-            
+      );
+
       bid.status = dto.status;
-            
+
       // Lacchain
       const newId = new ObjectId();
-      const bidHistoryId = newId.toHexString()    
+      const bidHistoryId = newId.toHexString()
 
       const newData = await this.createData(bid)
-      const hash = await this.calculateHash(newData);        
-      const txHash = await this._lacchainModel.setBidData(token, bidHistoryId, hash);    
-      await this._bidHistoryModel.insert(bidHistoryId, newData, txHash); 
+      const hash = await this.calculateHash(newData);
+      const txHash = await this._lacchainModel.setBidData(token, bidHistoryId, hash);
+      await this._bidHistoryModel.insert(bidHistoryId, newData, txHash);
 
 
       /*
@@ -501,8 +501,8 @@ export class BidService {
     }
 
     if (dto.allomentStatus) {
-         
-      const bid = await this._bidsRepository.getById(_id);      
+
+      const bid = await this._bidsRepository.getById(_id);
 
       await this._allotmentRepository.updateStatusByIds(
         bid.add_allotment.map(el => el._id.toString()),
@@ -514,14 +514,14 @@ export class BidService {
 
     const bid = await this._bidsRepository.getBidById(_id);
     bid.status = dto.status;
-    
+
     // Lacchain
     const newId = new ObjectId();
-    const bidHistoryId = newId.toHexString()    
+    const bidHistoryId = newId.toHexString()
 
     const newData = await this.createData(bid)
-    const hash = await this.calculateHash(newData);        
-    const txHash = await this._lacchainModel.setBidData(token, bidHistoryId, hash);    
+    const hash = await this.calculateHash(newData);
+    const txHash = await this._lacchainModel.setBidData(token, bidHistoryId, hash);
     await this._bidHistoryModel.insert(bidHistoryId, newData, txHash);
 
     return result;
@@ -646,6 +646,14 @@ export class BidService {
       throw new BadRequestException("Fornecedor não tem nenhuma licitação vinculada!");
     }
 
+  }
+  
+  formatCNPJ(cnpj: string): string {
+    const cnpjSemPontuacao = cnpj.replace(/[^\d]+/g, '');
+    if (cnpj.length !== cnpjSemPontuacao.length) {
+      return cnpj;
+    }
+    return cnpjSemPontuacao.replace(/^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})$/, "$1.$2.$3/$4-$5");
   }
 
   async sendTieBreaker(_id: string): Promise<any> {
@@ -772,7 +780,7 @@ export class BidService {
       //DADOS ASSOCIAÇÃO
 
       .replace(/\[association_name\]/g, respondeAssociation.name)
-      .replace(/\[association_id\]/g, "" + respondeAssociation.cnpj + " ")
+      .replace(/\[association_id\]/g, "" + this.formatCNPJ(respondeAssociation.cnpj) + " ")
       .replace(/\[association_zip_code\]/g, "" + respondeAssociation.address.zipCode + " ")
       .replace(
         /\[association_address\]/g,
@@ -879,9 +887,9 @@ export class BidService {
     lang: string = LanguageContractEnum.english,
     type: ModelContractClassificationEnum
   ): Promise<any> {
-    
+
     const modelContract = await this._modelContractRepository.getByContractAndLanguage(lang, type);
-    
+
     if (!modelContract) throw new Error("Modelo de documento não encontrado");
 
     const content = fs.readFileSync(path.resolve("src/shared/documents", modelContract.contract), "binary");
@@ -897,10 +905,10 @@ export class BidService {
 
     const contractArray = await this._contractRepository.getByBidId(_id);
 
-    const proposalArray = await this._proposalRepository.listByBid(_id);    
+    const proposalArray = await this._proposalRepository.listByBid(_id);
 
     const contract = contractArray ? contractArray[0] : null;
-      
+
     let allotment: AllotmentModel[] = [];
 
     // contract.proposal_id.forEach(proposal => {
@@ -913,7 +921,7 @@ export class BidService {
       allotment.push(allot);
     });
 
-    let listOfItems: any[] = [];    
+    let listOfItems: any[] = [];
 
     listOfItems = await this.costItensGet(allotment, proposalArray);
 
@@ -924,7 +932,7 @@ export class BidService {
         0
       ) ||
       0;
-        
+
     let signature = "Assinado eletronicamente pela: ";
     let yes = "Sim";
     let no = "Não";
@@ -1061,7 +1069,7 @@ export class BidService {
   }
 
   private async costItensGet(allotment: AllotmentModel[], proposal?: ProposalModel[]): Promise<any[]> {
-        
+
     let listOfItems = [];
     for (let allot of allotment) {
       let el = proposal.find(proposal => proposal.allotment.find(all => all._id.toString() === allot._id.toString()));
@@ -1074,15 +1082,15 @@ export class BidService {
           .reduce((a, b) => Number(a) + Number(b), 0)
           .toFixed(2);
         price = +Number(price / quantity).toFixed(2);
-      }      
-      
-      for (let item of allot.add_item) {             
+      }
 
-        const costItems = await this.itemsModel.getByName(item.item);                
+      for (let item of allot.add_item) {
 
-        listOfItems.push({          
+        const costItems = await this.itemsModel.getByName(item.item);
+
+        listOfItems.push({
           code: costItems.code,
-          name: item.item,          
+          name: item.item,
           classification: costItems?.group.segment || "Sem classificação",
           specification: item.specification || "Sem especificação",
           quantity: item.quantity,
@@ -1188,10 +1196,10 @@ export class BidService {
   }
 
 
-  createData(dto){
+  createData(dto) {
 
     const data = {
-      bidId: dto._id.toHexString(),      
+      bidId: dto._id.toHexString(),
       description: dto.description,
       agreement: dto.agreement._id.toHexString(),
       classification: dto.classification,
@@ -1200,14 +1208,14 @@ export class BidService {
       city: dto.city,
       association: dto.association._id.toHexString(),
       status: dto.status
-    } 
+    }
 
     return data;
 
   }
 
-  calculateHash(data){
-    return '0x'+SHA256(JSON.stringify(data)).toString(enc.Hex);        
+  calculateHash(data) {
+    return '0x' + SHA256(JSON.stringify(data)).toString(enc.Hex);
   }
 
 
