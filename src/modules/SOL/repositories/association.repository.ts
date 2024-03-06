@@ -70,7 +70,7 @@ export class AssociationRepository {
     }
 
     async getByCnpj(cnpj: string): Promise<AssociationModel> {
-        return await this._model.findOne({ cnpj });
+        return await this._model.findOne({ cnpj: cnpj, status: AssociationStatusEnum.active });
     }
 
 }
