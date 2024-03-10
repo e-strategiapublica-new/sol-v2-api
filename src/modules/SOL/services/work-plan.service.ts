@@ -28,7 +28,6 @@ export class WorkPlanService {
     for(let i=0;i<dto.product.length;i++){
       itemArray.push({ "_id": new ObjectId(dto.product[i].items)});
     }
-    console.log("aqui", itemArray);
     const costItems = await this._itemsModel.listByIds(itemArray); 
 
     for (let i = 0; i < dto.product.length; i++) {
