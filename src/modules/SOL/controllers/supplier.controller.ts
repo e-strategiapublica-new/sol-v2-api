@@ -83,7 +83,7 @@ export class SupplierController {
                     response['supplier_user'] = await this.userService.register(dto_user);
                 } catch (error) {
                     this.logger.error(error.message);
-
+                    this.supplierService.deleteById(response._id);
                     throw new HttpException(
                         new ResponseDto(false, null, [error.message]),
                         HttpStatus.BAD_REQUEST,
@@ -100,11 +100,17 @@ export class SupplierController {
 
         } catch (error) {
             this.logger.error(error.message);
-
-            throw new HttpException(
-                new ResponseDto(false, null, [error.message]),
-                HttpStatus.BAD_REQUEST,
-            );
+            if (error.response?.errors) {
+                throw new HttpException(
+                    new ResponseDto(false, null, [error.response?.errors?.pop()]),
+                    HttpStatus.BAD_REQUEST,
+                );
+            } else {
+                throw new HttpException(
+                    new ResponseDto(false, null, [error.message]),
+                    HttpStatus.BAD_REQUEST,
+                );
+            }
         }
     }
 

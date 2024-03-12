@@ -140,7 +140,7 @@ export class UserService {
     
     const result = await this._userRepository.register(dto);
     if (!result)
-      throw new BadRequestException('Email não encontrado!');
+      throw new BadRequestException('Email já existente na plataforma!');
 
     return new UserRegisterResponseDto(
       result._id,
