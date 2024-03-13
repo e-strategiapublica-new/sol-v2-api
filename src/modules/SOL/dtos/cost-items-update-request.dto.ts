@@ -11,7 +11,7 @@ export abstract class CostItemsUpdateRequestDto {
     @ApiProperty({ type: String })
     name: string;
 
-    @ApiProperty({ type: String, enum: Object.keys(UnitMeasureEnum) })
+    @ApiProperty({ type: String })
     unitMeasure: string;
 
     @ApiProperty({ type: String })
