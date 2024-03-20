@@ -129,10 +129,12 @@ export class BidRepository {
     return await this._model
       .find()
       .populate("add_allotment")
-      .populate("agreement")
+      .populate("agreement.association")
       .populate({ path: "agreement", populate: { path: "workPlan" } })
+      .populate({ path: "agreement", populate: { path: "association" } })
       .populate("invited_suppliers")
       .populate("association")
+      .populate({ path: "association", populate: { path: "association" } })
       .populate("add_allotment.proposals.proposedBy");
   }
 
