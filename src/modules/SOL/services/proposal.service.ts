@@ -142,7 +142,7 @@ export class ProposalService {
 
         if (newProposal.length > 0)
           for (let data of anotherWithSameValue) {
-            const index = newProposal.findIndex(el => el.proposal._id.toString() === data._id.toString());
+            const index = newProposal.findIndex(el => el.proposal._id.toString().includes(data._id.toString()));
             data.proposalWin = true;
             newProposal[index].proposalWin = true;
             newProposal[index].proposal = data;
