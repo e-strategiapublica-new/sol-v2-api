@@ -224,8 +224,8 @@ export class ProposalService {
               newProposal[proposalIndex].proposal = proposalList.find(
                 a => a._id.toString() === el.proposal._id.toString()
               );
+              newProposal[proposalIndex].proposal.proposalWin = true;
             }
-            newProposal[proposalIndex].proposal.proposalWin = true;
           });
           await this._proposalRepository.updateListProposedWin(
             anotherWithSameValue.map(el => el.proposal._id.toString()),
