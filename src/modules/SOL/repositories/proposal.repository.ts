@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
 
 import { InjectModel } from "@nestjs/mongoose";
-import { Model } from "mongoose";
+import mongoose, { Model } from "mongoose";
 
 import { Proposal } from "../schemas/proposal.schema";
 import { ProposalModel } from "../models/proposal.model";
@@ -16,12 +16,14 @@ import { ProposalAcceptedRequestDto } from "../dtos/proposal-accepted-request.dt
 import { ProposalStatusEnum } from "../enums/proposal-status.enum";
 import { ProposalUpdateValues } from "../dtos/proposal-update-values-request.dto";
 import { ProposalReviewerAcceptUpdateDto } from "../dtos/proposal-accept-reviewer-update.dto";
+import { UserRepository } from "./user.repository";
 
 @Injectable()
 export class ProposalRepository {
 
     constructor(
         @InjectModel(Proposal.name) private readonly _model: Model<ProposalModel>,
+        private readonly _userRepository: UserRepository,
     ) { }
 
     async register(dto: ProposalRegisterDto): Promise<ProposalModel> {
@@ -151,9 +153,21 @@ export class ProposalRepository {
     }
 
     async listByUser(proposedById: string): Promise<ProposalModel[]> {
-        const proposals = await this._model.find({ proposedBy: { _id: proposedById } }).populate('proposedBy').populate('allotment');
-        return proposals
+        const proposedByUser = await this._userRepository.getById(proposedById);
+        const supplier_user = await this._userRepository.getUserBySupplierId(proposedByUser.supplier._id);
+    
+        // Extrai apenas os IDs dos usuários fornecedores
+        const supplierIds = supplier_user.map(user => user._id);
+    
+        // Garante que os IDs estejam no formato ObjectID
+        const supplierObjectIds = supplierIds.map(id => new mongoose.Types.ObjectId(id)); // Supondo que você esteja usando Mongoose
+    
+        // Agora você pode usar os IDs formatados corretamente na consulta
+        const proposals = await this._model.find({ proposedBy: { $in: supplierObjectIds } }).populate('proposedBy').populate('allotment');
+    
+        return proposals;
     }
+
 
     async listByBidsWaiting(bidId: string): Promise<ProposalModel[]> {
         const proposals = await this._model.find({ bid: { _id: bidId } }).populate('proposedBy').populate('refusedBy').populate('acceptedFornecedor').populate('acceptedRevisor').populate('allotment');

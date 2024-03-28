@@ -33,6 +33,7 @@ import { MutableObject } from "src/shared/interfaces/mutable-object.interface";
 import { AllotmentModel } from "../models/allotment.model";
 import { BidService } from "./bid.service";
 import { ProposalReviewerAcceptUpdateDto } from "../dtos/proposal-accept-reviewer-update.dto";
+import { extractAndCompareContent } from "../utils/string-and-id-compare.helper";
 
 @Injectable()
 export class ProposalService {
@@ -47,7 +48,7 @@ export class ProposalService {
     private readonly _contractService: ContractService,
     private readonly _notificationService: NotificationService,
     private readonly _bidService: BidService
-  ) {}
+  ) { }
 
   async register(proposedById: string, dto: ProposalRegisterDto): Promise<ProposalModel> {
     const proposedBy = await this._userRepository.getById(proposedById);
@@ -89,7 +90,7 @@ export class ProposalService {
 
     if (bid.bid_type === "globalPrice") {
       const verify = proposalList.some(
-        el => el.proposedBy.supplier._id.toString() === proposedBy.supplier._id.toString()
+        el => extractAndCompareContent(el.proposedBy.supplier._id.toString(), proposedBy.supplier._id.toString())
       );
       if (verify) {
         throw new BadRequestException("Já foi enviado uma proposta para essa licitação!");
@@ -97,17 +98,22 @@ export class ProposalService {
     }
 
     if (bid.bid_type !== "globalPrice") {
-      const verify = dto.allotment.some(el =>
-        el.proposals.some(
-          item =>
-            proposalList
-              .find(pro => pro._id.toString() === item.proposal._id.toString())
-              ?.proposedBy.supplier._id.toString() === proposedBy.supplier._id.toString()
-        )
-      );
-      if (verify) {
-        throw new BadRequestException("Já foi enviado uma proposta para essa licitação!");
-      }
+      let verify: boolean = false;
+
+      dto.allotment.forEach(el => {
+        el.proposals.forEach(item => {
+          const proposal = proposalList.find(pro => extractAndCompareContent(pro._id.toString(), item.proposal._id.toString()));
+
+          if (proposal && extractAndCompareContent(proposal.proposedBy.supplier._id.toString(), proposedBy.supplier._id.toString())) {
+            verify = true;
+          }
+        });
+
+
+        if (verify) {
+          throw new BadRequestException("Já foi enviado uma proposta para essa licitação!");
+        }
+      });
     }
 
     const allotment: MutableObject<AllotmentModel> = await this._allotmentRepository.listById(dto.allotmentIds[0]);
@@ -142,7 +148,7 @@ export class ProposalService {
 
         if (newProposal.length > 0)
           for (let data of anotherWithSameValue) {
-            const index = newProposal.findIndex(el => el.proposal._id.toString().includes(data._id.toString()));
+            const index = newProposal.findIndex(el => extractAndCompareContent(el.proposal._id.toString(), data._id.toString()));
             data.proposalWin = true;
             newProposal[index].proposalWin = true;
             newProposal[index].proposal = data;
@@ -163,7 +169,7 @@ export class ProposalService {
         }
         if (newProposal.length > 0)
           for (let data of anotherWithSameValue) {
-            const index = newProposal.findIndex(el => el.proposal._id === data._id.toString());
+            const index = newProposal.findIndex(el => extractAndCompareContent(el.proposal._id, data._id.toString()));
             data.proposalWin = true;
             newProposal[index].proposalWin = true;
             newProposal[index].proposal = data;
@@ -189,12 +195,12 @@ export class ProposalService {
         if (anotherWithSameValue.length > 0) {
           anotherWithSameValue.forEach((el, index) => {
             const proposalIndex = newProposal.findIndex(
-              item => item.proposal._id.toString() === el.proposal._id.toString()
+              item => extractAndCompareContent(item.proposal._id.toString(), el.proposal._id.toString())
             );
             if (proposalIndex != -1) {
               newProposal[proposalIndex].proposalWin = true;
               newProposal[proposalIndex].proposal = proposalList.find(
-                a => a._id.toString() === el.proposal._id.toString()
+                a => extractAndCompareContent(a._id.toString(), el.proposal._id.toString())
               );
               newProposal[proposalIndex].proposal.proposalWin = true;
             }
@@ -217,12 +223,12 @@ export class ProposalService {
         if (anotherWithSameValue.length > 0) {
           anotherWithSameValue.forEach((el, index) => {
             const proposalIndex = newProposal.findIndex(
-              item => item.proposal._id.toString() === el.proposal._id.toString()
+              item => extractAndCompareContent(item.proposal._id.toString(), el.proposal._id.toString())
             );
             if (proposalIndex != -1) {
               newProposal[proposalIndex].proposalWin = true;
               newProposal[proposalIndex].proposal = proposalList.find(
-                a => a._id.toString() === el.proposal._id.toString()
+                a => extractAndCompareContent(a._id.toString(), el.proposal._id.toString())
               );
               newProposal[proposalIndex].proposal.proposalWin = true;
             }
@@ -299,14 +305,14 @@ export class ProposalService {
       throw new BadRequestException("Proposta não encontrada!");
     }
     const result = await this._proposalRepository.updateAcceptReviewer(_id, dto);
-    if(dto.reviewer_accept === false) {
-      await  this._allotmentService.updateStatus(result.allotment[0]._id, AllotmentStatusEnum.fracassado);
+    if (dto.reviewer_accept === false) {
+      await this._allotmentService.updateStatus(result.allotment[0]._id, AllotmentStatusEnum.fracassado);
       result.allotment[0].status = AllotmentStatusEnum.fracassado;
 
     }
 
     if (result.association_accept && result.reviewer_accept) {
-      await  this._allotmentService.updateStatus(result.allotment[0]._id, AllotmentStatusEnum.adjudicado);
+      await this._allotmentService.updateStatus(result.allotment[0]._id, AllotmentStatusEnum.adjudicado);
       return await this.acceptProposal(result._id.toString(), userId);
     }
     return result;
@@ -451,7 +457,13 @@ export class ProposalService {
     const result = await this._proposalRepository.updateStatus(_id, dto);
     return result;
   }
+  // el.proposals.forEach(item => {
+  //   const proposal = proposalList.find(pro => extractAndCompareContent(pro._id.toString(), item.proposal._id.toString()));
 
+  //   if (proposal && extractAndCompareContent(proposal.proposedBy.supplier._id.toString(), proposedBy.supplier._id.toString())) {
+  //     verify = true;
+  //   }
+  // });
   async getByUserInBid(proposedById: string, allotmentId: string): Promise<boolean> {
     const proposalList = await this._proposalRepository.listByUser(proposedById);
     const verify = await proposalList.filter(el =>
