@@ -561,8 +561,8 @@ export class BidService {
         const { reviewer_accept, acceptedRevisorAt } = await this._proposalRepository.getById(
           result.add_allotment[i].proposals[j].proposal._id
         );
-        result.add_allotment[i].proposals[j].proposal.reviewer_accept = reviewer_accept;
-        result.add_allotment[i].proposals[j].proposal.acceptedRevisorAt = acceptedRevisorAt;
+        if(reviewer_accept) result.add_allotment[i].proposals[j].proposal.reviewer_accept = reviewer_accept;
+        if(acceptedRevisorAt) result.add_allotment[i].proposals[j].proposal.acceptedRevisorAt = acceptedRevisorAt;
       }
     }
 
