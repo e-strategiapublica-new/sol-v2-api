@@ -17,6 +17,9 @@ export abstract class AllotmentRequestDto {
 
     @ApiProperty({ type: String })
     quantity: string;
+    
+    @ApiProperty({ type: String })
+    unitMeasure: string;
 
     @ApiProperty({ type: String })
     files: string;
