@@ -14,6 +14,7 @@ export interface AllotmentInterface {
 
     readonly quantity: string;
     readonly files: string;
+    readonly unitMeasure: string;
     readonly add_item: Items[];
     proposals: ProposalInAllotmentInterface[];
 
