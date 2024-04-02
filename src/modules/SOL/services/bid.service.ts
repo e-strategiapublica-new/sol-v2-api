@@ -558,11 +558,20 @@ export class BidService {
         result.add_allotment[i].proposals[j].proposal.proposedBy = await this._userRepository.getById(
           result.add_allotment[i].proposals[j].proposal.proposedBy._id
         );
-        const { reviewer_accept, acceptedRevisorAt } = await this._proposalRepository.getById(
+        const proposalDetails = await this._proposalRepository.getById(
           result.add_allotment[i].proposals[j].proposal._id
         );
-        if(reviewer_accept) result.add_allotment[i].proposals[j].proposal.reviewer_accept = reviewer_accept;
-        if(acceptedRevisorAt) result.add_allotment[i].proposals[j].proposal.acceptedRevisorAt = acceptedRevisorAt;
+        
+        if (proposalDetails) {
+          const { reviewer_accept, acceptedRevisorAt } = proposalDetails;
+        
+          if (reviewer_accept !== null) {
+            result.add_allotment[i].proposals[j].proposal.reviewer_accept = reviewer_accept;
+          }
+          if (acceptedRevisorAt !== null) {
+            result.add_allotment[i].proposals[j].proposal.acceptedRevisorAt = acceptedRevisorAt;
+          }
+        }
       }
     }
 
