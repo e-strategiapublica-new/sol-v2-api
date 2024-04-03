@@ -119,11 +119,13 @@ export class ProposalService {
     const allotment: MutableObject<AllotmentModel> = await this._allotmentRepository.listById(dto.allotmentIds[0]);
     const newProposal: ProposalInAllotmentInterface[] = [];
     allotment.proposals.forEach(el => {
-      el.proposal.proposalWin = false;
-      newProposal.push({
-        proposal: el.proposal,
-        proposalWin: false,
-      });
+      if (el.proposal) {
+        el.proposal.proposalWin = false;
+        newProposal.push({
+          proposal: el.proposal,
+          proposalWin: false,
+        });
+      }
     });
 
     if (bid.bid_type === "globalPrice") {
