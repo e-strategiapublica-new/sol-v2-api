@@ -151,9 +151,12 @@ export class ProposalService {
         if (newProposal.length > 0)
           for (let data of anotherWithSameValue) {
             const index = newProposal.findIndex(el => extractAndCompareContent(el.proposal._id.toString(), data._id.toString()));
-            data.proposalWin = true;
-            newProposal[index].proposalWin = true;
-            newProposal[index].proposal = data;
+            
+            if(newProposal[index]){
+              data.proposalWin = true;
+              newProposal[index].proposalWin = true;
+              newProposal[index].proposal = data;
+            }
           }
       }
       if (dto.total_value < objectWithSmallestValue.total_value) {
@@ -172,9 +175,12 @@ export class ProposalService {
         if (newProposal.length > 0)
           for (let data of anotherWithSameValue) {
             const index = newProposal.findIndex(el => extractAndCompareContent(el.proposal._id, data._id.toString()));
-            data.proposalWin = true;
-            newProposal[index].proposalWin = true;
-            newProposal[index].proposal = data;
+            
+            if(newProposal[index]){
+              data.proposalWin = true;
+              newProposal[index].proposalWin = true;
+              newProposal[index].proposal = data;
+            }
           }
       }
     }
@@ -200,11 +206,13 @@ export class ProposalService {
               item => extractAndCompareContent(item.proposal._id.toString(), el.proposal._id.toString())
             );
             if (proposalIndex != -1) {
-              newProposal[proposalIndex].proposalWin = true;
-              newProposal[proposalIndex].proposal = proposalList.find(
-                a => extractAndCompareContent(a._id.toString(), el.proposal._id.toString())
-              );
-              newProposal[proposalIndex].proposal.proposalWin = true;
+              if(newProposal[proposalIndex]){
+                newProposal[proposalIndex].proposalWin = true;
+                newProposal[proposalIndex].proposal = proposalList.find(
+                  a => extractAndCompareContent(a._id.toString(), el.proposal._id.toString())
+                );
+                newProposal[proposalIndex].proposal.proposalWin = true;
+              }
             }
           });
           await this._proposalRepository.updateListProposedWin(
@@ -228,11 +236,13 @@ export class ProposalService {
               item => extractAndCompareContent(item.proposal._id.toString(), el.proposal._id.toString())
             );
             if (proposalIndex != -1) {
-              newProposal[proposalIndex].proposalWin = true;
-              newProposal[proposalIndex].proposal = proposalList.find(
-                a => extractAndCompareContent(a._id.toString(), el.proposal._id.toString())
-              );
-              newProposal[proposalIndex].proposal.proposalWin = true;
+              if(newProposal[proposalIndex]){
+                newProposal[proposalIndex].proposalWin = true;
+                newProposal[proposalIndex].proposal = proposalList.find(
+                  a => extractAndCompareContent(a._id.toString(), el.proposal._id.toString())
+                );
+                newProposal[proposalIndex].proposal.proposalWin = true;
+              }
             }
           });
           await this._proposalRepository.updateListProposedWin(
