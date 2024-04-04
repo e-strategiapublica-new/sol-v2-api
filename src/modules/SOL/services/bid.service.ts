@@ -990,7 +990,7 @@ export class BidService {
               proposal.association_accept && proposal.reviewer_accept
                 ? moment(proposal.acceptedRevisorAt).format(formatDateString)
                 : "",
-            number_contract: contract.contract_number + "/" + moment(contract.createdAt).format("YYYY"),
+            number_contract: contract?.contract_number + "/" + moment(contract?.createdAt).format("YYYY"),
           });
         });
 
@@ -1025,8 +1025,8 @@ export class BidService {
         ", " +
         bid.association.association.address.zipCode,
       name_legal_representative_purchaser: bid.association.association.legalRepresentative.name,
-      name_supplier: contract?.supplier_id?.name || "Don't have supplier",
-      supplier_country: contract?.supplier_id?.address.state || "Don't have supplier",
+      name_supplier: contract?.supplier_id?.name || "Não tem fornecedor",
+      supplier_country: contract?.supplier_id?.address.state || "Não tem fornecedor",
       adress_supplier: contract?.supplier_id
         ? contract?.supplier_id?.address.publicPlace +
         ", " +
@@ -1039,12 +1039,12 @@ export class BidService {
         contract?.supplier_id?.address.state +
         ", " +
         contract?.supplier_id?.address.zipCode
-        : "Don't have supplier",
-      name_legal_representative_supplier: contract?.supplier_id?.legal_representative.name || "Don't have supplier",
+        : "Não tem fornecedor",
+      name_legal_representative_supplier: contract?.supplier_id?.legal_representative.name || "Não tem fornecedor",
       purchaser_cnpj: bid.association.association.cnpj,
-      supplier_cnpj: contract?.supplier_id?.cpf || "Don't have supplier",
+      supplier_cnpj: contract?.supplier_id?.cpf || "Não tem fornecedor",
       delivery_place: bid.local_to_delivery,
-      supplier_email: contract?.supplier_id?.name || "Don't have supplier",
+      supplier_email: contract?.supplier_id?.name || "Não tem fornecedor",
       days_to_delivery: bid.days_to_delivery,
       date_to_delivery: moment().add(bid.days_to_delivery, "days").format(formatDateString),
       role_purchaser: "",
