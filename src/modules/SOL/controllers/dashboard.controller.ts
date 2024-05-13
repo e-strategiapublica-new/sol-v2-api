@@ -20,8 +20,7 @@ export class DashboardController {
     @Get()
     @HttpCode(200)
     @ApiBearerAuth()
-    @UseGuards(JwtAuthGuard, FuncoesGuard)
-    @Funcoes(UserTypeEnum.administrador)
+    @UseGuards(JwtAuthGuard)
     async get() {
         try {
             const response = await this._dashboardService.getData();

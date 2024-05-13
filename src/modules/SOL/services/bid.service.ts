@@ -287,6 +287,7 @@ export class BidService {
   async findAgreementByReviewerId(_id: string): Promise<BidModel[] | void> {
     const projects = await this._projectService.findAllProjectsByReviewerId(_id)
     const agreement_list: AgreementInterfaceWithId[] = []
+    console.log('projects', projects)
     for (let i = 0; i < projects.length; i++) {
       const agreement = await this._agreementService.findAgreementByProjectrId(projects[i]._id.toString())
       if (agreement) agreement_list.push(agreement)
@@ -296,6 +297,10 @@ export class BidService {
       const bid = await this._bidsRepository.getByAgreementId(agreement_list[i]._id.toString())
       if (bid) results.push(...bid)
     }
+  
+    const myBid = await this._bidsRepository.getByReviewerId(_id)
+    if (myBid) results.push(...myBid)
+
     return results
   }
 

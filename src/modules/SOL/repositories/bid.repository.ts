@@ -24,6 +24,10 @@ export class BidRepository {
     return await  this._model.find({agreement: {_id}})
    
   }
+  async getByReviewerId(_id: string): Promise<BidModel[]> {
+    return await  this._model.find({reviewer: {_id}})
+   
+  }
 
   async update(_id: string, dto: BidUpdateDto): Promise<BidModel> {
     
