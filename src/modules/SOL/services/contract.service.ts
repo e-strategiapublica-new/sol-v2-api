@@ -626,7 +626,7 @@ export class ContractService {
       list_of_bid_prices: listOfBidPrices,
       bid_opening_date: moment(contract.bid_number.start_at).format(formatDateString),
       email_purchaser: contract.bid_number.association.email,
-      deadline_date: moment(contract.bid_number.end_at).format(formatDateString),
+      deadline_date: contract.bid_number.end_at ? moment(contract.bid_number.end_at).format(formatDateString) : "| A definir no momento da abertura da licitação |",
       website_url: contract.bid_number.aditional_site || "Sem site adicional",
       day_contract: moment(contract.createdAt).format("DD"),
       month_contract: moment(contract.createdAt).format("MM"),
@@ -646,6 +646,7 @@ export class ContractService {
         ", " +
         contract.bid_number.agreement.association.address.zipCode,
       name_legal_representative_purchaser: contract.bid_number.agreement.association.legalRepresentative.name,
+      cpf_legal_representative_purchaser: contract.bid_number.agreement.association.legalRepresentative.cpf,
       name_supplier: contract.supplier_id?.name || '',
       supplier_country: contract.supplier_id?.address.state,
       adress_supplier:
@@ -663,6 +664,7 @@ export class ContractService {
       name_legal_representative_supplier: contract.supplier_id?.legal_representative?.name || '',
       purchaser_cnpj: contract.bid_number.agreement.association.cnpj,
       supplier_cnpj: contract.supplier_id?.cpf,
+      supplier_cpf: contract.supplier_id?.cpf,
       delivery_place: contract.bid_number.local_to_delivery,
       supplier_email: contract.supplier_id?.name,
       days_to_delivery: contract.bid_number.days_to_delivery,
@@ -673,6 +675,7 @@ export class ContractService {
       batch_list_name: listOfItems.map(item => item.name).toString(),
       agreement_name:
         contract.bid_number.agreement.register_number + "/" + contract.bid_number.agreement.register_object,
+      agreement_number: contract.bid_number.agreement.register_number,
       signature_purchaser:
         signature +
         contract.bid_number.agreement.association.name +
