@@ -34,6 +34,7 @@ import { AllotmentModel } from "../models/allotment.model";
 import { BidService } from "./bid.service";
 import { ProposalReviewerAcceptUpdateDto } from "../dtos/proposal-accept-reviewer-update.dto";
 import { extractAndCompareContent } from "../utils/string-and-id-compare.helper";
+import { Proposal } from "../schemas/proposal.schema";
 
 @Injectable()
 export class ProposalService {
@@ -135,7 +136,7 @@ export class ProposalService {
       );
 
       const objectWithSmallestValue = proposalList.reduce((prev: any, current: any) => {
-        return current.total_value < prev.total_value ? current : prev;
+        return (current.total_value + (current.freight ?? 0)) < (prev.total_value + (prev.freight ?? 0)) ? current : prev;
       });
 
       if (dto.total_value === objectWithSmallestValue.total_value) {
@@ -192,7 +193,8 @@ export class ProposalService {
       );
 
       const proposalWithSmallValue = newProposal.reduce((prev, current) => {
-        return current.proposal.total_value < prev.proposal.total_value ? current : prev;
+        return (current.proposal.total_value + (current.proposal.freight ?? 0)) < (prev.proposal.total_value + (prev.proposal.freight ?? 0)) ? current : prev;
+
       });
 
       if (dto.total_value === proposalWithSmallValue.proposal.total_value) {
@@ -221,7 +223,7 @@ export class ProposalService {
           );
         }
       }
-      if (dto.total_value < proposalWithSmallValue.proposal.total_value) {
+      if (dto.total_value <= proposalWithSmallValue.proposal.total_value) {
         dto.proposalWin = true;
       }
       if (dto.total_value > proposalWithSmallValue.proposal.total_value) {
@@ -625,7 +627,7 @@ export class ProposalService {
         );
 
         const proposalWithSmallValue = newAllotmentProposal.reduce((prev, current) => {
-          return current.proposal.total_value < prev.proposal.total_value ? current : prev;
+          return (current.proposal.total_value + (current.proposal.freight ?? 0)) < (prev.proposal.total_value + (prev.proposal.freight ?? 0)) ? current : prev;
         });
 
         const anotherWithSameValue = newAllotmentProposal.filter(
