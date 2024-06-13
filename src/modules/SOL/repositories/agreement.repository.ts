@@ -139,6 +139,28 @@ export class AgreementRepository {
       });
 
   }
+  
+  async findForReviewer(reviewerId: string): Promise<AgreementModel[]> {
+    return await this._model
+      .find({ 
+        reviewer: { _id: reviewerId },
+        activeStatus: AgreementActiveStatusEnum.active
+      })
+      // .populate("reviewer")
+      .populate("association")
+      .populate("manager")
+      .populate("reviewer")
+      .populate({
+        path: "workPlan",
+        populate: {
+          path: "product",
+          populate: {
+            path: "items",
+          },
+        },
+      });
+
+  }
   async findByProjectId(projectId: string): Promise<AgreementModel[]> {
 
     return await this._model

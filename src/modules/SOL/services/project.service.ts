@@ -74,7 +74,6 @@ export class ProjectService {
     
   }
   async findAllProjectsByManagerId(reviewerId: string): Promise<ProjectInterfaceWithId[]> {
-    console.log(reviewerId)
     return await this._projectRepository.findAllProjectsByManagerId(reviewerId);
     
   }

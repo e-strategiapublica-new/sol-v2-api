@@ -6,11 +6,12 @@ import { AgreementInterface } from "./agreement.interface";
 import { AllotmentModel } from "../models/allotment.model";
 import { SupplierModel } from "../models/supplier.model";
 import { UserModel } from "../models/user.model";
+import { AgreementModel } from "../models/agreement.model";
 
 export interface BidInterface {
 
     readonly description: string;
-    readonly agreement: AgreementInterface;
+    readonly agreement: AgreementModel;
 
     readonly password: string;
 

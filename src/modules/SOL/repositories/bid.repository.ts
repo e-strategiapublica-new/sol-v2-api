@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
-import { Model } from "mongoose";
+import mongoose, { Model } from "mongoose";
 import { Bids } from "../schemas/bids.schema";
 import { BidModel } from "../models/bid.model";
 import { BideRegisterDto } from "../dtos/bid-register-request.dto";
@@ -10,10 +10,12 @@ import { BidAddProposalDto } from "../dtos/bid-add-proposal.dto";
 import { BidChangeStatusRequestDto } from "../dtos/bid-change-status-request.dto";
 import { BidStatusEnum } from "../enums/bid-status.enum";
 import { SupplierModel } from "../models/supplier.model";
+import { AgreementRepository } from "./agreement.repository";
 
 @Injectable()
 export class BidRepository {
-  constructor(@InjectModel(Bids.name) private readonly _model: Model<BidModel>) {}
+  constructor(@InjectModel(Bids.name) private readonly _model: Model<BidModel>,
+  private readonly _agreementRepository: AgreementRepository) {}
 
   async register(dto: BideRegisterDto): Promise<BidModel> {
     const data = await new this._model(dto);
@@ -24,9 +26,11 @@ export class BidRepository {
     return await  this._model.find({agreement: {_id}})
    
   }
-  async getByReviewerId(_id: string): Promise<BidModel[]> {
-    return await  this._model.find({reviewer: {_id}})
-   
+  async getByReviewerId(_id: string): Promise<BidModel[]> {  
+    const agreements = await this._agreementRepository.findForReviewer(_id);
+    const agreementIds = agreements.map(agreement => agreement._id);
+  
+    return await this._model.find({ agreement: { $in: agreementIds } }).exec();
   }
 
   async update(_id: string, dto: BidUpdateDto): Promise<BidModel> {

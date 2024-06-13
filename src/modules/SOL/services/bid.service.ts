@@ -334,7 +334,6 @@ export class BidService {
       _id
     );
     const agreement_list: AgreementInterfaceWithId[] = [];
-    console.log("projects", projects);
     for (let i = 0; i < projects.length; i++) {
       const agreement = await this._agreementService.findAgreementByProjectrId(
         projects[i]._id.toString()
